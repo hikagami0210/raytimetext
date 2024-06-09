@@ -3,8 +3,8 @@
   "name": "raytimetext",
   "title": "RayTimeText",
   "description": "Provides automatic text input that changes based on the time.",
-  "icon": "command-icon.png",
-  "author": "fsban772",
+  "icon": "clock.png",
+  "author": "hikagami0210",
   "owner": "hikagami",
   "categories": [
     "Other"
@@ -15,6 +15,18 @@
       "name": "index",
       "title": "RayTimeText",
       "description": "Provides automatic text input that changes based on the time.",
+      "mode": "no-view"
+    },
+    {
+      "name": "create",
+      "title": "Create RayTimeText",
+      "description": "Create time ranges and messages",
+      "mode": "view"
+    },
+    {
+      "name": "list",
+      "title": "List RayTimeText",
+      "description": "Display time ranges and messages",
       "mode": "view"
     }
   ],

@@ -1,40 +1,37 @@
-import { Form, ActionPanel, Action, showToast } from "@raycast/api";
+import { Clipboard, LocalStorage, showToast, Toast } from "@raycast/api";
 
-type Values = {
-  textfield: string;
-  textarea: string;
-  datepicker: Date;
-  checkbox: boolean;
-  dropdown: string;
-  tokeneditor: string[];
+const toMinutes = (time: string): number => {
+  const [hour, minute] = time.split(":").map(Number);
+  return hour * 60 + minute;
 };
 
-export default function Command() {
-  function handleSubmit(values: Values) {
-    console.log(values);
-    showToast({ title: "Submitted form", message: "See logs for submitted values" });
-  }
+export default async function Command() {
+  const [nowHour, nowMinute] = new Date().toLocaleTimeString().split(":"); // ["16", "00"]
 
-  return (
-    <Form
-      actions={
-        <ActionPanel>
-          <Action.SubmitForm onSubmit={handleSubmit} />
-        </ActionPanel>
+  const objList = (await LocalStorage.getItem<string>("rayTimeText")) || "[]";
+
+  console.log(objList);
+
+  // 現在の時刻が設定されている時刻の範囲内であれば、メッセージをクリップボードにコピーする
+  const pasteMessage = async (objList: string) => {
+    const objToJSON = JSON.parse(objList);
+
+    const nowMinutes = toMinutes(`${nowHour}:${nowMinute}`);
+
+    for (const obj of objToJSON) {
+      const startMinutes = toMinutes(obj.startTime);
+      const endMinutes = toMinutes(obj.endTime);
+
+      if (
+        (nowMinutes >= startMinutes && nowMinutes <= endMinutes) ||
+        (endMinutes < startMinutes && (nowMinutes >= startMinutes || nowMinutes <= endMinutes))
+      ) {
+        return await Clipboard.paste(obj.message);
       }
-    >
-      <Form.Description text="This form showcases all available form elements." />
-      <Form.TextField id="textfield" title="Text field" placeholder="Enter text" defaultValue="Raycast" />
-      <Form.TextArea id="textarea" title="Text area" placeholder="Enter multi-line text" />
-      <Form.Separator />
-      <Form.DatePicker id="datepicker" title="Date picker" />
-      <Form.Checkbox id="checkbox" title="Checkbox" label="Checkbox Label" storeValue />
-      <Form.Dropdown id="dropdown" title="Dropdown">
-        <Form.Dropdown.Item value="dropdown-item" title="Dropdown Item" />
-      </Form.Dropdown>
-      <Form.TagPicker id="tokeneditor" title="Tag picker">
-        <Form.TagPicker.Item value="tagpicker-item" title="Tag Picker Item" />
-      </Form.TagPicker>
-    </Form>
-  );
+    }
+
+    await showToast(Toast.Style.Failure, "undefined time range (未設定の時間帯です)");
+  };
+
+  await pasteMessage(objList);
 }
