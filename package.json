@@ -6,6 +6,10 @@
   "icon": "clock.png",
   "author": "hikagami",
   "owner": "hikagami",
+  "createdBy": {
+    "name": "hikagami",
+    "email": "fsban772@gmail.com"
+  },
   "categories": [
     "Other"
   ],
