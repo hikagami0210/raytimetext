@@ -4,12 +4,8 @@
   "title": "RayTimeText",
   "description": "Provides automatic text input that changes based on the time.",
   "icon": "clock.png",
-  "author": "hikagami",
-  "owner": "hikagami",
-  "createdBy": {
-    "name": "hikagami",
-    "email": "fsban772@gmail.com"
-  },
+  "author": "hikagami0210",
+  "owner": "hikagami0210",
   "categories": [
     "Other"
   ],
